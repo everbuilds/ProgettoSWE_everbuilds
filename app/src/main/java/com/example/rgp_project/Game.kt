@@ -1,70 +1,74 @@
 package com.example.rgp_project
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.RectShape
-import android.graphics.drawable.shapes.RoundRectShape
+import android.content.ClipData
+import android.content.ClipDescription
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.DisplayMetrics
-import android.util.Log
-import android.view.MotionEvent
-import android.view.VelocityTracker
+import android.view.DragEvent
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
+
 
 class Game : AppCompatActivity() {
-
-    private var mVelocityTracker: VelocityTracker? = null
-    var Xposition = 25
-    var Yposition = 600
-    //var right = 50
-    //var bottom = 50
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+        val ship = findViewById<View>(R.id.ship)
+        val space = findViewById<ConstraintLayout>(R.id.space)
 
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        space.setOnDragListener(dragListener)
+        ship.setOnLongClickListener {
+            val clipText = "This s our Clipdata text"
+            val item = ClipData.Item(clipText)
+            val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
+            val data = ClipData(clipText, mimeTypes, item)
 
-        var width = displayMetrics.widthPixels
-        var height = displayMetrics.heightPixels
+            val dragShadowBuilder = View.DragShadowBuilder(it)
+            it.startDragAndDrop(data, dragShadowBuilder, it, 0)
 
-        val bitmap: Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val canvas: Canvas = Canvas(bitmap)
-
-        var shapeDrawable: ShapeDrawable
-        shapeDrawable = ShapeDrawable(RectShape())
-        shapeDrawable.setBounds( Xposition-25, Yposition-25 ,Xposition+25,Yposition+25)
-        shapeDrawable.getPaint().setColor(Color.parseColor("#009944"))
-        shapeDrawable.draw(canvas)
-
-
-        val imageV = findViewById<ImageView>(R.id.imageV)
-        imageV.background = BitmapDrawable(getResources(), bitmap)
-    }
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-
-        val x : Float = event.x
-        val y : Float = event.y
-        when (event.actionMasked) {
-            MotionEvent.ACTION_MOVE -> {
-                /*var dx = x-Xposition
-                var dy = y-Yposition*/
-                Xposition = x.toInt()
-                Yposition = y.toInt()
-                //println(Xposition)
-                //println(Yposition)
-            }
-            MotionEvent.ACTION_UP -> {
-                var view : View =  
-            }
+            it.visibility = View.INVISIBLE
+            true
         }
-        return true
     }
+
+    val dragListener = View.OnDragListener {view, event ->
+        when(event.action) {
+            DragEvent.ACTION_DRAG_STARTED -> {
+                event.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
+            }
+            DragEvent.ACTION_DRAG_ENTERED -> {
+                view.invalidate()
+                true
+            }
+            DragEvent.ACTION_DRAG_LOCATION -> true
+            DragEvent.ACTION_DRAG_EXITED -> {
+                view.invalidate()
+                true
+            }
+            DragEvent.ACTION_DROP -> {
+                val item = event.clipData.getItemAt(0)
+                val dragData = item.text
+                Toast.makeText(this, dragData, Toast.LENGTH_SHORT).show()
+
+                view.invalidate()
+
+                val v = event.localState as ImageView
+                val owner = v.parent as ConstraintLayout
+                owner.removeView(v)
+                val destination = view as ConstraintLayout
+                destination.addView(v)
+                v.visibility = View.VISIBLE
+                true
+            }
+            DragEvent.ACTION_DRAG_ENDED -> {
+                view.invalidate()
+                true
+            }
+            else -> false
+        }
+    }
+
 }
