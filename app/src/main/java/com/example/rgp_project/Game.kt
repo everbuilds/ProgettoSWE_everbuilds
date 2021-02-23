@@ -1,70 +1,45 @@
 package com.example.rgp_project
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.RectShape
-import android.graphics.drawable.shapes.RoundRectShape
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Point
 import android.os.Bundle
-import android.util.DisplayMetrics
-import android.util.Log
-import android.view.MotionEvent
-import android.view.VelocityTracker
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+
 
 class Game : AppCompatActivity() {
 
-    private var mVelocityTracker: VelocityTracker? = null
-    var Xposition = 25
-    var Yposition = 600
-    //var right = 50
-    //var bottom = 50
+    // kotlinInvadersView will be the view of the game
+    // It will also hold the logic of the game
+    // and respond to screen touches as well
+    private var kotlinInvadersView: KotlinInvadersView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_game)
 
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        // Get a Display object to access screen details
+        val display = windowManager.defaultDisplay
+        // Load the resolution into a Point object
+        val size = Point()
+        display.getSize(size)
 
-        var width = displayMetrics.widthPixels
-        var height = displayMetrics.heightPixels
-
-        val bitmap: Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val canvas: Canvas = Canvas(bitmap)
-
-        var shapeDrawable: ShapeDrawable
-        shapeDrawable = ShapeDrawable(RectShape())
-        shapeDrawable.setBounds( Xposition-25, Yposition-25 ,Xposition+25,Yposition+25)
-        shapeDrawable.getPaint().setColor(Color.parseColor("#009944"))
-        shapeDrawable.draw(canvas)
-
-
-        val imageV = findViewById<ImageView>(R.id.imageV)
-        imageV.background = BitmapDrawable(getResources(), bitmap)
+        // Initialize gameView and set it as the view
+        kotlinInvadersView = KotlinInvadersView(this, size)
+        setContentView(kotlinInvadersView)
     }
-    override fun onTouchEvent(event: MotionEvent): Boolean {
 
-        val x : Float = event.x
-        val y : Float = event.y
-        when (event.actionMasked) {
-            MotionEvent.ACTION_MOVE -> {
-                /*var dx = x-Xposition
-                var dy = y-Yposition*/
-                Xposition = x.toInt()
-                Yposition = y.toInt()
-                //println(Xposition)
-                //println(Yposition)
-            }
-            MotionEvent.ACTION_UP -> {
-                var view : View =  
-            }
-        }
-        return true
+    // This method executes when the player starts the game
+    override fun onResume() {
+        super.onResume()
+
+        // Tell the gameView resume method to execute
+        kotlinInvadersView?.resume()
     }
+
+    // This method executes when the player quits the game
+    override fun onPause() {
+        super.onPause()
+
+        // Tell the gameView pause method to execute
+        kotlinInvadersView?.pause()
+    }
+
 }
