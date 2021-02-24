@@ -1,5 +1,6 @@
 package com.example.rgp_project
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -8,63 +9,97 @@ import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RectShape
 import android.graphics.drawable.shapes.RoundRectShape
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.MotionEvent
-import android.view.VelocityTracker
-import android.view.View
+import android.view.*
+import android.view.MotionEvent.INVALID_POINTER_ID
 import android.widget.Button
-import android.widget.ImageView
+import androidx.core.view.MotionEventCompat
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-class Game : AppCompatActivity() {
-
-    private var mVelocityTracker: VelocityTracker? = null
-    var Xposition = 25
-    var Yposition = 600
-    //var right = 50
-    //var bottom = 50
-
-    override fun onCreate(savedInstanceState: Bundle?) {
+class Game: AppCompatActivity() {
+    override fun onCreate(savedInstanceState:Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+        //var xDelta:Int = 0
+        //var yDelta:Int = 0
+        var mainLayout:ViewGroup = findViewById(R.id.main)
+        var image:ImageView = findViewById(R.id.image)
+        var listener = View.OnTouchListener(function = {mainLayout, motionEvent ->
 
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
+            if (motionEvent.action == MotionEvent.ACTION_MOVE) {
 
-        var width = displayMetrics.widthPixels
-        var height = displayMetrics.heightPixels
-
-        val bitmap: Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val canvas: Canvas = Canvas(bitmap)
-
-        var shapeDrawable: ShapeDrawable
-        shapeDrawable = ShapeDrawable(RectShape())
-        shapeDrawable.setBounds( Xposition-25, Yposition-25 ,Xposition+25,Yposition+25)
-        shapeDrawable.getPaint().setColor(Color.parseColor("#009944"))
-        shapeDrawable.draw(canvas)
-
-
-        val imageV = findViewById<ImageView>(R.id.imageV)
-        imageV.background = BitmapDrawable(getResources(), bitmap)
-    }
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-
-        val x : Float = event.x
-        val y : Float = event.y
-        when (event.actionMasked) {
-            MotionEvent.ACTION_MOVE -> {
-                /*var dx = x-Xposition
-                var dy = y-Yposition*/
-                Xposition = x.toInt()
-                Yposition = y.toInt()
-                //println(Xposition)
-                //println(Yposition)
+                mainLayout.y = motionEvent.rawY - mainLayout.height/2
+                mainLayout.x = motionEvent.rawX - mainLayout.width/2
             }
-            MotionEvent.ACTION_UP -> {
-                var view : View =  
+
+            true
+
+        })
+        image.setOnTouchListener(listener)
+        /*image.setOnTouchListener(object : OnTouchListener {
+            override fun onTouch(view:View, event:MotionEvent):Boolean {
+                val x = event.getRawX() as Int
+                val y = event.getRawY() as Int
+                when (event.getAction() and MotionEvent.ACTION_MASK) {
+                    MotionEvent.ACTION_DOWN -> {
+                        val lParams = view.getLayoutParams() as RelativeLayout.LayoutParams
+                        xDelta = x - lParams.leftMargin
+                        yDelta = y - lParams.topMargin
+                    }
+                    MotionEvent.ACTION_UP -> Toast.makeText(this@Game, "I'm here!", Toast.LENGTH_SHORT)
+                        .show()
+                    MotionEvent.ACTION_MOVE -> {
+                        val layoutParams = view
+                            .getLayoutParams() as RelativeLayout.LayoutParams
+                        layoutParams.leftMargin = x - xDelta
+                        layoutParams.topMargin = y - yDelta
+                        layoutParams.rightMargin = 0
+                        layoutParams.bottomMargin = 0
+                        view.setLayoutParams(layoutParams)
+                    }
+                }
+                //mainLayout?.invalidate()
+                return true
+            }
+        })*/
+    }
+    /*private fun onTouchListener():OnTouchListener {
+        return object: OnTouchListener {
+            @SuppressLint("ClickableViewAccessibility")
+            override fun onTouch(view:View, event:MotionEvent):Boolean {
+                val x = event.getRawX() as Int
+                val y = event.getRawY() as Int
+                when (event.getAction() and MotionEvent.ACTION_MASK) {
+                    MotionEvent.ACTION_DOWN -> {
+                        val lParams = view.getLayoutParams() as RelativeLayout.LayoutParams
+                        xDelta = x - lParams.leftMargin
+                        yDelta = y - lParams.topMargin
+                    }
+                    MotionEvent.ACTION_UP -> Toast.makeText(this@Game, "I'm here!", Toast.LENGTH_SHORT)
+                            .show()
+                    MotionEvent.ACTION_MOVE -> {
+                        val layoutParams = view
+                            .getLayoutParams() as RelativeLayout.LayoutParams
+                        layoutParams.leftMargin = x - xDelta
+                        layoutParams.topMargin = y - yDelta
+                        layoutParams.rightMargin = 0
+                        layoutParams.bottomMargin = 0
+                        view.setLayoutParams(layoutParams)
+                    }
+                }
+                mainLayout?.invalidate()
+                return true
             }
         }
-        return true
-    }
+    }*/
 }
