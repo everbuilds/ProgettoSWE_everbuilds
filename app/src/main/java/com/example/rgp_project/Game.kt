@@ -27,13 +27,15 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 class Game: AppCompatActivity() {
+
+    private lateinit var mainLayout:ViewGroup
+    private lateinit var image:ImageView
+
     override fun onCreate(savedInstanceState:Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-        //var xDelta:Int = 0
-        //var yDelta:Int = 0
-        var mainLayout:ViewGroup = findViewById(R.id.main)
-        var image:ImageView = findViewById(R.id.image)
+        mainLayout = findViewById(R.id.main)
+        image = findViewById(R.id.image)
         var listener = View.OnTouchListener(function = {mainLayout, motionEvent ->
 
             if (motionEvent.action == MotionEvent.ACTION_MOVE) {
@@ -46,60 +48,5 @@ class Game: AppCompatActivity() {
 
         })
         image.setOnTouchListener(listener)
-        /*image.setOnTouchListener(object : OnTouchListener {
-            override fun onTouch(view:View, event:MotionEvent):Boolean {
-                val x = event.getRawX() as Int
-                val y = event.getRawY() as Int
-                when (event.getAction() and MotionEvent.ACTION_MASK) {
-                    MotionEvent.ACTION_DOWN -> {
-                        val lParams = view.getLayoutParams() as RelativeLayout.LayoutParams
-                        xDelta = x - lParams.leftMargin
-                        yDelta = y - lParams.topMargin
-                    }
-                    MotionEvent.ACTION_UP -> Toast.makeText(this@Game, "I'm here!", Toast.LENGTH_SHORT)
-                        .show()
-                    MotionEvent.ACTION_MOVE -> {
-                        val layoutParams = view
-                            .getLayoutParams() as RelativeLayout.LayoutParams
-                        layoutParams.leftMargin = x - xDelta
-                        layoutParams.topMargin = y - yDelta
-                        layoutParams.rightMargin = 0
-                        layoutParams.bottomMargin = 0
-                        view.setLayoutParams(layoutParams)
-                    }
-                }
-                //mainLayout?.invalidate()
-                return true
-            }
-        })*/
     }
-    /*private fun onTouchListener():OnTouchListener {
-        return object: OnTouchListener {
-            @SuppressLint("ClickableViewAccessibility")
-            override fun onTouch(view:View, event:MotionEvent):Boolean {
-                val x = event.getRawX() as Int
-                val y = event.getRawY() as Int
-                when (event.getAction() and MotionEvent.ACTION_MASK) {
-                    MotionEvent.ACTION_DOWN -> {
-                        val lParams = view.getLayoutParams() as RelativeLayout.LayoutParams
-                        xDelta = x - lParams.leftMargin
-                        yDelta = y - lParams.topMargin
-                    }
-                    MotionEvent.ACTION_UP -> Toast.makeText(this@Game, "I'm here!", Toast.LENGTH_SHORT)
-                            .show()
-                    MotionEvent.ACTION_MOVE -> {
-                        val layoutParams = view
-                            .getLayoutParams() as RelativeLayout.LayoutParams
-                        layoutParams.leftMargin = x - xDelta
-                        layoutParams.topMargin = y - yDelta
-                        layoutParams.rightMargin = 0
-                        layoutParams.bottomMargin = 0
-                        view.setLayoutParams(layoutParams)
-                    }
-                }
-                mainLayout?.invalidate()
-                return true
-            }
-        }
-    }*/
 }
