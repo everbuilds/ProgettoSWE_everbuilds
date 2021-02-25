@@ -1,4 +1,4 @@
-provapackage com.example.rgp_project
+package com.example.rgp_project
 
 import android.content.Context
 import android.graphics.*
@@ -20,9 +20,6 @@ class GameView(context: Context, private val size: Point) : SurfaceView(context)
     //Canvas e Paint object
     private var canvas: Canvas = Canvas()
     private val paint: Paint = Paint()
-
-    //Tempo per ondata
-    private var time = 30
 
     //Punteggio
     private var score = 0
@@ -52,8 +49,8 @@ class GameView(context: Context, private val size: Point) : SurfaceView(context)
         //Costruisco ondata
         Alien.numberOfAliens = 0
         numAliens = 0
-        for (column in 0..10) {
-            for (row in 0..5) {
+        for (column in 0..6) {
+            for (row in 0..3) {
                 aliens.add(Alien(context, row, column, size.x, size.y))
                 numAliens++
             }
@@ -62,6 +59,14 @@ class GameView(context: Context, private val size: Point) : SurfaceView(context)
         for (i in 0 until maxAliensBullets) {
             aliensBullets.add(Bullet(size.y))
         }
+
+        println("size.x="+size.x)
+        println("size.y="+size.y)
+        println("width="+player.width)
+        println("left="+player.position.left)
+        println("top="+player.position.top)
+        println("right="+player.position.right)
+        println("bottom="+player.position.bottom)
     }
 
     override fun run() {
@@ -132,9 +137,19 @@ class GameView(context: Context, private val size: Point) : SurfaceView(context)
             //Muovi alieni giù e cambia direzione
             for (alien in aliens) {
                 alien.dropDownAndReverse(waves)
-                // Have the invaders landed
-                if (alien.position.bottom >= size.y && alien.isVisible) {
-                    lost = true
+                //Alieni a bordo sotto
+                if (alien.position.top >= size.y/2f && alien.isVisible) {
+                    alien.isVisible = false
+                    Alien.numberOfAliens --
+                    if (Alien.numberOfAliens == 0) {
+                        paused = true
+                        lives ++
+                        aliens.clear()
+                        aliensBullets.clear()
+                        buildLevel()
+                        waves ++
+                        break
+                    }
                 }
             }
         }
@@ -166,7 +181,6 @@ class GameView(context: Context, private val size: Point) : SurfaceView(context)
                             aliensBullets.clear()
                             buildLevel()
                             waves ++
-                            time = 30
                             break
                         }
                         //Non controllare altri alieni
@@ -240,7 +254,7 @@ class GameView(context: Context, private val size: Point) : SurfaceView(context)
             // Cambio colore, disegno score/vite/tempo
             paint.color = Color.argb(255, 255, 255, 255)
             paint.textSize = 70f
-            canvas.drawText("Score: $score   Lives: $lives Wave: $waves Time: $time", 20f, 75f, paint)
+            canvas.drawText("Score: $score   Lives: $lives Wave: $waves", 20f, 75f, paint)
 
             //Disegno tutto a schermo
             holder.unlockCanvasAndPost(canvas)
@@ -271,17 +285,17 @@ class GameView(context: Context, private val size: Point) : SurfaceView(context)
 
     // La classe SurfaceView implementa onTouchListener quindi bisogna fare override
     override fun onTouchEvent(motionEvent: MotionEvent): Boolean {
-        val motionArea = size.y - (size.y / 8)
         when (motionEvent.action and MotionEvent.ACTION_MASK) {
-            MotionEvent.ACTION_POINTER_DOWN, MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE-> {
+            MotionEvent.ACTION_POINTER_DOWN, MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
                 paused = false
-                if (motionEvent.x > size.x / 2) {
+                if (motionEvent.x<player.position.right && motionEvent.x>player.position.left)
+                    player.moving = player.stopped
+                else if (motionEvent.x > player.position.right) {
                     player.moving = player.right
-                } else {
+                } else if (motionEvent.x < player.position.left){
                     player.moving = player.left
                 }
             }
-
             MotionEvent.ACTION_POINTER_UP, MotionEvent.ACTION_UP -> {
                 player.moving = player.stopped
             }

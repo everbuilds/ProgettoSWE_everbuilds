@@ -11,12 +11,13 @@ class Alien(context: Context, row: Int, column: Int, screenX: Int, screenY: Int)
     //Grandezza alieni
     var width = screenX / 35f
     private var height = screenY / 35f
-    private val padding = screenX / 45
+    private val padding = screenX / 30
 
-    var position = RectF(column * (width + padding), 100 + row * (width + padding / 4), column * (width + padding) + width, 100 + row * (width + padding / 4) + height)
+    var position = RectF(column * (width + padding), 100 + row * (width + padding), column * (width + padding) + width, 100 + row * (width + padding / 4) + height)
 
     //Velocità alieni
-    private var speed = 40f
+    private var speed = 200f
+
 
     private val left = 1
     private val right = 2
@@ -58,7 +59,8 @@ class Alien(context: Context, row: Int, column: Int, screenX: Int, screenY: Int)
         position.bottom += height
 
         //Velocità aumenta con le ondate
-        speed *=  (1.1f + (waveNumber.toFloat() / 20))
+        //speed *=  (1.1f + (waveNumber.toFloat() / 30))
+        speed += 30f
     }
 
     fun takeAim(playerShipX: Float, playerShipLength: Float, waves: Int): Boolean {
