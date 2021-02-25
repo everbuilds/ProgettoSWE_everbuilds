@@ -12,7 +12,7 @@ class Lobby : AppCompatActivity() {
 
         val buttongame = findViewById<Button>(R.id.button4)
         buttongame.setOnClickListener{
-            val intent = Intent(this, Game::class.java)
+            val intent = Intent(this, GameActivity::class.java)
             startActivity(intent)
         }
     }

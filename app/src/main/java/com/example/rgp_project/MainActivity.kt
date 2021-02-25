@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
         val buttonsp = findViewById<Button>(R.id.button2)
         buttonsp.setOnClickListener{
-            val intent = Intent(this, Game::class.java)
+            val intent = Intent(this, GameActivity::class.java)
             startActivity(intent)
         }
         val buttonchart = findViewById<ImageButton>(R.id.imageButton5)

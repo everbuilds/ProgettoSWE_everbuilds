@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RGP_Project">
-        <activity android:name=".Game"/>
+        <activity android:name=".GameActivity" android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"/>
         <activity android:name=".Lobby" />
         <activity android:name=".Chart" />
         <activity android:name=".Settings" />
