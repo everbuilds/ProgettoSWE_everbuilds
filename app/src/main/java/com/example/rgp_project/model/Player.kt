@@ -5,6 +5,7 @@ import android.graphics.*
 import android.util.Log
 import com.example.rgp_project.GameView
 import com.example.rgp_project.model.component.HealthBar
+import com.example.rgp_project.model.powerup.PowerUp
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.pow
@@ -14,16 +15,16 @@ class Player(var positionX : Float, var positionY : Float, var radius : Float, v
     val paint : Paint = Paint();
     companion object{
         val MAX_HEALTH : Float = 1000f
-        val SHOT_EVERY_UPDATES : Int = 100;
+        val SHOT_EVERY_UPDATES : Int = 60;
     }
     var curUpdatesFromShot = 0;
 
     var health : Float = MAX_HEALTH
     lateinit var healthBar : HealthBar ;
     init {
-        paint.color = Color.RED
+        paint.color = Color.GREEN
         var hbColor : Paint = Paint()
-        hbColor.setColor(Color.CYAN)
+        hbColor.setColor(Color.GREEN)
         healthBar = HealthBar(
                 RectF(20f, scene.getMaxHeight().toFloat() - 50, scene.getMaxWidth().toFloat()-20, scene.getMaxHeight().toFloat() - 10),
                 hbColor,
@@ -35,11 +36,22 @@ class Player(var positionX : Float, var positionY : Float, var radius : Float, v
         healthBar.draw(canvas)
     }
 
-    fun update( bullets: List<Bullet>) {
+    fun update( bullets: List<Bullet>, powerUps: List<PowerUp>) {
         curUpdatesFromShot++
         if(curUpdatesFromShot >= SHOT_EVERY_UPDATES){
             curUpdatesFromShot = 0;
             shoot();
+        }
+        powerUps.forEach{
+            el -> run {
+                val dist = sqrt((
+                            ((el.getX()?: 0f) - positionX).pow(2) +
+                            ((el.getY()?: 0f) - positionY).pow(2)).toDouble()
+                )
+                if (dist < PowerUp.RADIUS + radius) {
+                    el.apply(this)
+                }
+            }
         }
 
         bullets.forEach{

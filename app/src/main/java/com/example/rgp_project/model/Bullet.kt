@@ -9,18 +9,15 @@ class Bullet(var x : Float, var y : Float, var direction : Direction, var scene 
     enum class Direction {
         UP, DOWN
     }
-    public var damage = 300;
+    public var damage = 100;
     private var isHit : Boolean = false;
     var paint : Paint = Paint();
     private val DY : Float = 10.0f
     companion object {
         var RADIUS: Float = 10.0f
-        var id : Int = 0;
     }
-    var _id = id;
     init {
-        id++;
-        paint.color = Color.YELLOW
+        paint.color = if( direction == Bullet.Direction.DOWN) Color.RED else Color.GREEN
     }
     fun draw(canvas: Canvas?) {
         canvas?.drawCircle(x, y , RADIUS , paint)

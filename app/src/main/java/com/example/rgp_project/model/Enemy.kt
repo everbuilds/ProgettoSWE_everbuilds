@@ -10,19 +10,18 @@ import kotlin.math.pow
 
 class Enemy(var player : Player, var left : Float, var top : Float, var width: Float, var height: Float , var scene : GameView) : HasHealth{
     var paint : Paint = Paint();
-    private var velocity = 50;
     companion object{
-        val MAX_HEALTH : Float = 1000f
+        val MAX_HEALTH : Float = 300f
         val SHOT_EVERY_UPDATES : Int = 100;
     }
     var curUpdatesFromShot = 0;
     var health : Float = MAX_HEALTH
     var healthBar : HealthBar;
     init {
-        paint.color = Color.GREEN
+        paint.color = Color.RED
 
         var hbColor : Paint = Paint()
-        hbColor.setColor(Color.GRAY)
+        hbColor.setColor(Color.RED)
         healthBar = HealthBar(
                 RectF(20f, 10f, scene.getMaxWidth().toFloat()-20, 50f),
                 hbColor,
@@ -45,7 +44,7 @@ class Enemy(var player : Player, var left : Float, var top : Float, var width: F
 
 
         var center : Float = left + width / 2;
-        var dx : Float = 4f
+        var dx : Float = 2f
         if(Math.abs(center - player.positionX) < dx ){
             left = player.positionX - width / 2
         } else if (center < player.positionX){
@@ -72,6 +71,9 @@ class Enemy(var player : Player, var left : Float, var top : Float, var width: F
 
     fun shoot() : Unit{
         scene.bullets.add(Bullet( left + width/2, top + height, Bullet.Direction.DOWN, scene))
+    }
+    fun isDead() : Boolean{
+        return this.health <= 0
     }
 
     override fun getCurrentHealth(): Float {

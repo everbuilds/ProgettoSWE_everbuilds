@@ -1,10 +1,12 @@
 package com.example.rgp_project
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Point
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Window
 import android.view.WindowManager
@@ -24,22 +26,23 @@ class GameActivity : Activity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
-        //Inizializza gameView e la imposta come view
-        gameView = GameView(this)
-        var gameOver = object: GameOverListener() {
+        val metrics = DisplayMetrics()
+        val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        windowManager.defaultDisplay.getMetrics(metrics)
+
+
+        gameView = GameView(this, metrics.widthPixels.toFloat(), metrics.heightPixels.toFloat())
+        gameView!!.setGameOverListener (object: GameOverListener() {
             override fun gameOver(score : Long) {
-                gameView?.stop()
-                Log.i("score", "score: ${score}")
                 callGameOverActivity(score )
             }
-        }
-        gameView!!.setGameOverListener (gameOver)
+        })
+
         setContentView(gameView)
 
     }
 
     private fun callGameOverActivity(score : Long) {
-        Log.i("score", "score: ${score}")
         val intent : Intent = Intent(this, GameOverActivity::class.java);
         intent.putExtra("score", score)
         startActivity(intent)

@@ -11,4 +11,9 @@ class GameOverActivity : AppCompatActivity() {
         val score = intent.getLongExtra("score", 0)
         findViewById<TextView>(R.id.score).text = score.toString()
     }
+
+    override fun onBackPressed() {
+        this.finish()
+        super.onBackPressed()
+    }
 }

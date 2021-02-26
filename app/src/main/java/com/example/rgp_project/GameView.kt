@@ -4,36 +4,41 @@ package com.example.rgp_project
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import com.example.rgp_project.model.Bullet
 import com.example.rgp_project.model.Enemy
 import com.example.rgp_project.model.Player
+import com.example.rgp_project.model.factory.EnemyFactory
+import com.example.rgp_project.model.factory.LifePowerUpFactory
+import com.example.rgp_project.model.powerup.PowerUp
+import com.example.rgp_project.panel.FPSPanel
+import com.example.rgp_project.panel.GamePanel
+import com.example.rgp_project.panel.UPSPanel
 import java.util.concurrent.CopyOnWriteArrayList
 
 
-class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
+class GameView(context: Context, private val MAX_WIDTH : Float,private val MAX_HEIGHT : Float ) : SurfaceView(context), SurfaceHolder.Callback {
     private val gameOverListeners : ArrayList<GameOverListener> = ArrayList()
-    private val MAX_WIDTH : Int;
-    private val MAX_HEIGHT : Int;
-    private var enemies : CopyOnWriteArrayList<Enemy> = CopyOnWriteArrayList();
-    var player : Player
-    val bullets = CopyOnWriteArrayList<Bullet>()
-    val startTime = System.currentTimeMillis();
-    private var surfaceHolder = holder;
-    private var gameLoop: GameLoop = GameLoop(this, surfaceHolder);
+    private val enemyFactory = EnemyFactory(this);
+    private val lifePowerUpFactory = LifePowerUpFactory(this);
+
+    private var enemies : CopyOnWriteArrayList<Enemy>    = CopyOnWriteArrayList();
+    private var powerUps : CopyOnWriteArrayList<PowerUp> = CopyOnWriteArrayList();
+    private var panels : CopyOnWriteArrayList<GamePanel> = CopyOnWriteArrayList();
+    // TODO : rendere privata e gestirla a eventi
+    public  val bullets : CopyOnWriteArrayList<Bullet>   = CopyOnWriteArrayList();
+
+    var player : Player = Player(MAX_WIDTH / 2, MAX_HEIGHT / 5 * 4, 40F, this)
+    private val startTime = System.currentTimeMillis();
+    private var gameLoop: GameLoop = GameLoop(this, holder);
+
     init {
-        val metrics = DisplayMetrics()
-        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        windowManager.defaultDisplay.getMetrics(metrics)
-        MAX_WIDTH = metrics.widthPixels
-        MAX_HEIGHT = metrics.heightPixels
-        player = Player(metrics.widthPixels.toFloat() / 2, metrics.heightPixels.toFloat() / 5 * 4, 40F, this)
-        surfaceHolder.addCallback(this);
+        holder.addCallback(this);
         focusable = View.FOCUSABLE;
+
+        panels.add(FPSPanel(20F, MAX_HEIGHT/2, gameLoop, this ))
+        panels.add(UPSPanel(20F, MAX_HEIGHT/2 + 100, gameLoop, this ))
     }
 
     override fun draw(canvas: Canvas?) {
@@ -41,71 +46,44 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
             return;
         }
         super.draw(canvas)
-        drawFPS(canvas)
-        drawUPS(canvas)
         player.draw(canvas)
-        enemies.forEach { el -> el.draw(canvas)
-        }
-        bullets.forEach { el -> el.draw(canvas)
-        }
+        panels.forEach  { el -> el.draw(canvas) }
+        enemies.forEach { el -> el.draw(canvas) }
+        bullets.forEach { el -> el.draw(canvas) }
+        powerUps.forEach{ el -> el.draw(canvas) }
     }
-
+    private var eventEmitted = false;
     fun update() {
         if (player.health <= 0) {
-            gameOverListeners.forEach{
-                el -> el.gameOver(System.currentTimeMillis() - startTime)
+            if(!eventEmitted) {
+                stop()
+                gameOverListeners.forEach { el ->
+                    el.gameOver(System.currentTimeMillis() - startTime)
+                }
             }
+            eventEmitted = true;
             return;
         }
-        enemies.removeIf{
-            el -> el.health <= 0
-        }
+        enemies.removeIf(Enemy::isDead)
+        powerUps.removeIf(PowerUp::isUsed)
+        bullets.removeIf(Bullet::toRemove)
         if(enemies.size == 0){
-            val width = 150F;
-            val height = 100F;
-            this.addEnemy(
-                    Enemy(
-                            player ,
-                            (getMaxWidth().toFloat() - width) / 2,
-                            100F,
-                            width,
-                            height,
-                            this
-                    )
-            )
+            enemies .add(enemyFactory.generate())
+            powerUps.add(lifePowerUpFactory.generate())
         }
-        player.update(bullets)
-        enemies.forEach{ el ->
-            el.update(bullets)
-        }
-        bullets.forEach { el -> el.update()
-        }
-        bullets.removeIf{ el -> el.toRemove()
-        }
-    }
-
-    fun addEnemy(enemy: Enemy){
-        enemies.add(enemy)
+        player.update(bullets, powerUps)
+        enemies.forEach{ el -> el.update(bullets) }
+        bullets.forEach(Bullet::update)
+        powerUps.forEach(PowerUp::update)
     }
 
 
 
-
-
-
-    private fun drawUPS(canvas: Canvas?){
-        var avg: String = gameLoop.getAverageUPS().toInt().toString();
-        val paint : Paint = Paint()
-        paint.color = Color.RED
-        paint.textSize = 50F;
-        canvas?.drawText("UPS: $avg", 20F, MAX_HEIGHT.toFloat()/2, paint)
+    fun pause() : Unit{
+        gameLoop.stopLoop();
     }
-    private fun drawFPS(canvas: Canvas?){
-        var avg: String = gameLoop.getAverageFPS().toInt().toString();
-        val paint : Paint = Paint()
-        paint.color = Color.RED
-        paint.textSize = 50F;
-        canvas?.drawText("FPS: ${avg.format(2)}", 20F, MAX_HEIGHT.toFloat()/2 + 100, paint)
+    fun stop() : Unit{
+        gameLoop.killLoop();
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
@@ -117,20 +95,8 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
 
         gameLoop.startLoop()
     }
-    public fun pause() : Unit{
-        gameLoop.stopLoop();
-    }
-    public fun stop() : Unit{
-        gameLoop.killLoop();
-    }
-
-    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-        // TODO("Not yet implemented")
-    }
-
-    override fun surfaceDestroyed(holder: SurfaceHolder) {
-        // TODO("Not yet implemented")
-    }
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
+    override fun surfaceDestroyed(holder: SurfaceHolder) {}
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return when(event?.action) {
@@ -142,12 +108,13 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
         }
     }
 
-    public fun getMaxHeight() : Int{
+    fun getMaxHeight() : Float{
         return MAX_HEIGHT
     }
-    public fun getMaxWidth() : Int{
+    fun getMaxWidth() : Float{
         return MAX_WIDTH
     }
+
     fun setGameOverListener(listener : GameOverListener){
         gameOverListeners.add(listener)
     }

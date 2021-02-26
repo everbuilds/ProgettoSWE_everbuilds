@@ -96,6 +96,7 @@ class GameLoop(var game: GameView, var surfaceHolder: SurfaceHolder) : Thread(){
     }
 
     fun killLoop() {
+        isRunning = false
         this.interrupt()
     }
 }
