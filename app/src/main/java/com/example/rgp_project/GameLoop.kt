@@ -1,10 +1,7 @@
 package com.example.rgp_project
 
 import android.graphics.Canvas
-import android.util.Log
 import android.view.SurfaceHolder
-import java.lang.Exception
-import java.lang.IllegalArgumentException
 
 class GameLoop(var game: GameView, var surfaceHolder: SurfaceHolder) : Thread(){
 
@@ -26,7 +23,14 @@ class GameLoop(var game: GameView, var surfaceHolder: SurfaceHolder) : Thread(){
     fun startLoop() {
         isRunning = true;
         start();
-        
+    }
+    fun stopLoop() {
+        isRunning = false
+        try {
+            join()
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
     }
 
     override fun run() {
@@ -45,7 +49,7 @@ class GameLoop(var game: GameView, var surfaceHolder: SurfaceHolder) : Thread(){
                     updateCount++
                     game.draw(canvas)
                 }
-            } catch ( ex : IllegalArgumentException){
+            } catch (ex: IllegalArgumentException){
                 ex.printStackTrace()
             } finally {
                 try {
@@ -53,7 +57,7 @@ class GameLoop(var game: GameView, var surfaceHolder: SurfaceHolder) : Thread(){
                         surfaceHolder.unlockCanvasAndPost(canvas)
                         frameCount++
                     }
-                }catch (ex : Exception){
+                }catch (ex: Exception){
                     ex.printStackTrace()
                 }
             }
@@ -66,7 +70,7 @@ class GameLoop(var game: GameView, var surfaceHolder: SurfaceHolder) : Thread(){
             if(sleepTime > 0){
                 try{
                     sleep(sleepTime)
-                } catch(ex: InterruptedException){
+                } catch (ex: InterruptedException){
                     ex.printStackTrace()
                 }
             }
@@ -89,5 +93,9 @@ class GameLoop(var game: GameView, var surfaceHolder: SurfaceHolder) : Thread(){
                 startTime = System.currentTimeMillis()
             }
         }
+    }
+
+    fun killLoop() {
+        this.interrupt()
     }
 }

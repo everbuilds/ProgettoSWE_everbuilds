@@ -9,14 +9,17 @@ class Bullet(var x : Float, var y : Float, var direction : Direction, var scene 
     enum class Direction {
         UP, DOWN
     }
+    public var damage = 300;
     private var isHit : Boolean = false;
     var paint : Paint = Paint();
-    private var velocity : Int = 50
     private val DY : Float = 10.0f
     companion object {
         var RADIUS: Float = 10.0f
+        var id : Int = 0;
     }
+    var _id = id;
     init {
+        id++;
         paint.color = Color.YELLOW
     }
     fun draw(canvas: Canvas?) {

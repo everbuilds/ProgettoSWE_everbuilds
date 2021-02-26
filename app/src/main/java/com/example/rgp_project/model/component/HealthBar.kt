@@ -10,18 +10,17 @@ import com.example.rgp_project.model.Player;
 import java.util.*
 import kotlin.math.pow
 
-class HealthBar(private val initialLife: RectF, var paint: Paint, var element : HasHealth, var scene : GameView) {
-    private var life = initialLife;
+class HealthBar(private val initialLife: RectF, var paint: Paint, var element : HasHealth) {
+    private var life = RectF(initialLife);
 
     fun draw(canvas: Canvas?) {
         canvas?.drawRect(life, paint)
     }
 
     fun update() {
-        life = initialLife
         val curHealth = element.getCurrentHealth()
         val maxHealth = curHealth.coerceAtLeast(element.getMaxHealth())
-        life.left = initialLife.right + (initialLife.right - initialLife.left) * (curHealth / maxHealth)
+        life.right = initialLife.left + (initialLife.right - initialLife.left) * (curHealth / maxHealth)
     }
 
 

@@ -8,26 +8,27 @@ import com.example.rgp_project.model.component.HealthBar
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.pow
+import kotlin.math.sqrt
 
 class Player(var positionX : Float, var positionY : Float, var radius : Float, var scene : GameView) : HasHealth {
     val paint : Paint = Paint();
     companion object{
         val MAX_HEALTH : Float = 1000f
+        val SHOT_EVERY_UPDATES : Int = 100;
     }
-    val health : Float = MAX_HEALTH
-    var healthBar : HealthBar = HealthBar(
-        RectF(20f, scene.getMaxHeight().toFloat() - 50, scene.getMaxWidth().toFloat()-20, scene.getMaxHeight().toFloat() - 10),
-        paint,
-        this,
-        scene
-        );
+    var curUpdatesFromShot = 0;
+
+    var health : Float = MAX_HEALTH
+    lateinit var healthBar : HealthBar ;
     init {
         paint.color = Color.RED
-        Timer().scheduleAtFixedRate(object : TimerTask() {
-            override fun run() {
-                shoot();
-            }
-        },1283,1803)
+        var hbColor : Paint = Paint()
+        hbColor.setColor(Color.CYAN)
+        healthBar = HealthBar(
+                RectF(20f, scene.getMaxHeight().toFloat() - 50, scene.getMaxWidth().toFloat()-20, scene.getMaxHeight().toFloat() - 10),
+                hbColor,
+                this
+        );
     }
     fun draw(canvas: Canvas?) {
         canvas?.drawCircle(positionX, positionY, radius, paint)
@@ -35,13 +36,24 @@ class Player(var positionX : Float, var positionY : Float, var radius : Float, v
     }
 
     fun update( bullets: List<Bullet>) {
+        curUpdatesFromShot++
+        if(curUpdatesFromShot >= SHOT_EVERY_UPDATES){
+            curUpdatesFromShot = 0;
+            shoot();
+        }
+
         bullets.forEach{
             el -> run {
-                val dist = Math.sqrt((
+                val dist = sqrt((
                             (el.x - positionX).pow(2) +
                                     (el.y - positionY).pow(2)).toDouble())
                 if (dist < Bullet.RADIUS + radius) {
                     el.hit()
+                    if(el.damage.toFloat() > this.health){
+                        this.health = 0f;
+                    }else {
+                        this.health -= el.damage.toFloat()
+                    }
                 }
             }
         }
@@ -56,9 +68,6 @@ class Player(var positionX : Float, var positionY : Float, var radius : Float, v
         } else {
             positionX = scene.getMaxWidth() - radius
         }
-        Log.i("max width" , scene.getMaxWidth().toString())
-        Log.i("posX" , positionX.toString())
-        Log.i("posY" , positionY.toString())
         positionY = y;
     }
     fun shoot() : Unit{
