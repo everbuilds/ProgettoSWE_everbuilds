@@ -30,9 +30,9 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 
 class GameView(context: Context, private val MAX_WIDTH : Float,private val MAX_HEIGHT : Float ) : SurfaceView(context), SurfaceHolder.Callback {
-    private val gameOverListeners : ArrayList<GameOverListener> = ArrayList()
-    private val enemyFactory = EnemyFactory(this);
-    private val lifePowerUpFactory = LifePowerUpFactory(this);
+    private val GAME_OVER_LISTENERS : ArrayList<GameOverListener> = ArrayList()
+    private val ENEMY_FACTORY = EnemyFactory(this);
+    private val LIFE_POWERUP_FACTORY = LifePowerUpFactory(this);
 
     private var enemies : CopyOnWriteArrayList<Enemy>    = CopyOnWriteArrayList();
     private var powerUps : CopyOnWriteArrayList<PowerUp> = CopyOnWriteArrayList();
@@ -68,7 +68,7 @@ class GameView(context: Context, private val MAX_WIDTH : Float,private val MAX_H
         if (player.health <= 0) {
             if(!eventEmitted) {
                 stop()
-                gameOverListeners.forEach { el ->
+                GAME_OVER_LISTENERS.forEach { el ->
                     el.gameOver(System.currentTimeMillis() - startTime)
                 }
             }
@@ -79,8 +79,8 @@ class GameView(context: Context, private val MAX_WIDTH : Float,private val MAX_H
         powerUps.removeIf(PowerUp::isUsed)
         bullets.removeIf(Bullet::toRemove)
         if(enemies.size == 0){
-            enemies .add(enemyFactory.generate())
-            powerUps.add(lifePowerUpFactory.generate())
+            enemies .add(ENEMY_FACTORY.generate())
+            powerUps.add(LIFE_POWERUP_FACTORY.generate())
         }
         player.update(bullets, powerUps)
         enemies.forEach{ el -> el.update(bullets) }
@@ -90,10 +90,10 @@ class GameView(context: Context, private val MAX_WIDTH : Float,private val MAX_H
 
 
 
-    fun pause() : Unit{
+    fun pause() : Unit {
         gameLoop.stopLoop();
     }
-    fun stop() : Unit{
+    fun stop() : Unit {
         gameLoop.killLoop();
     }
 
@@ -119,14 +119,14 @@ class GameView(context: Context, private val MAX_WIDTH : Float,private val MAX_H
         }
     }
 
-    fun getMaxHeight() : Float{
+    fun getMaxHeight() : Float {
         return MAX_HEIGHT
     }
-    fun getMaxWidth() : Float{
+    fun getMaxWidth() : Float {
         return MAX_WIDTH
     }
 
-    fun setGameOverListener(listener : GameOverListener){
-        gameOverListeners.add(listener)
+    fun setGameOverListener(listener : GameOverListener) {
+        GAME_OVER_LISTENERS.add(listener)
     }
 }

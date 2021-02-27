@@ -25,9 +25,9 @@ class Lobby : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lobby)
 
-        val buttongame = findViewById<Button>(R.id.button4)
-        buttongame.setOnClickListener{
-            val intent = Intent(this, GameActivity::class.java)
+        val BUTTONGAME = findViewById<Button>(R.id.button4)
+        BUTTONGAME.setOnClickListener {
+            val INTENT = Intent(this, GameActivity::class.java)
             startActivity(intent)
         }
     }

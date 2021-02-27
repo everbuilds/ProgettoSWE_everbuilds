@@ -38,12 +38,12 @@ class GameActivity : Activity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
-        val metrics = DisplayMetrics()
-        val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        windowManager.defaultDisplay.getMetrics(metrics)
+        val METRICS = DisplayMetrics()
+        val WINDOW_MANAGER = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        WINDOW_MANAGER.defaultDisplay.getMetrics(METRICS)
 
 
-        gameView = GameView(this, metrics.widthPixels.toFloat(), metrics.heightPixels.toFloat())
+        gameView = GameView(this, METRICS.widthPixels.toFloat(), METRICS.heightPixels.toFloat())
         gameView!!.setGameOverListener (object: GameOverListener() {
             override fun gameOver(score : Long) {
                 callGameOverActivity(score )
@@ -55,8 +55,8 @@ class GameActivity : Activity() {
     }
 
     private fun callGameOverActivity(score : Long) {
-        val intent : Intent = Intent(this, GameOverActivity::class.java);
-        intent.putExtra("score", score)
+        val INTENT : Intent = Intent(this, GameOverActivity::class.java);
+        INTENT.putExtra("score", score)
         startActivity(intent)
     }
 

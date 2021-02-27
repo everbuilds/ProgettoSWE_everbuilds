@@ -16,7 +16,7 @@ package com.example.rgp_project
 import android.graphics.Canvas
 import android.view.SurfaceHolder
 
-class GameLoop(var game: GameView, var surfaceHolder: SurfaceHolder) : Thread(){
+class GameLoop(var game: GameView, var surfaceHolder: SurfaceHolder) : Thread() {
 
     private val MAX_UPS: Double = 60.0
     private val UPS_PERIOD: Double = 1000 / MAX_UPS
@@ -54,7 +54,7 @@ class GameLoop(var game: GameView, var surfaceHolder: SurfaceHolder) : Thread(){
         var startTime: Long = System.currentTimeMillis()
         var elapsedTime: Long = 0
         var sleepTime: Long = 0
-        while(isRunning){
+        while(isRunning) {
             try {
                 canvas = surfaceHolder.lockCanvas()
                 synchronized(surfaceHolder) {
@@ -80,16 +80,16 @@ class GameLoop(var game: GameView, var surfaceHolder: SurfaceHolder) : Thread(){
             // avoid to exceed max UPS
             elapsedTime = System.currentTimeMillis() - startTime;
             sleepTime = (updateCount * UPS_PERIOD).toLong() - elapsedTime
-            if(sleepTime > 0){
+            if(sleepTime > 0) {
                 try{
                     sleep(sleepTime)
-                } catch (ex: InterruptedException){
+                } catch (ex: InterruptedException) {
                     ex.printStackTrace()
                 }
             }
 
             //skip frames to mantain stable UPS
-            while(sleepTime < 0 && updateCount < MAX_UPS-1){
+            while(sleepTime < 0 && updateCount < MAX_UPS-1) {
                 game.update()
                 updateCount++;
                 elapsedTime = System.currentTimeMillis() - startTime;
@@ -98,7 +98,7 @@ class GameLoop(var game: GameView, var surfaceHolder: SurfaceHolder) : Thread(){
 
 
 
-            if(elapsedTime > 1000){
+            if(elapsedTime > 1000) {
                 averageUPS = updateCount.toDouble() / (1E-3 * elapsedTime).toDouble()
                 averageFPS = frameCount.toDouble() / (1E-3 * elapsedTime).toDouble()
                 frameCount = 0;

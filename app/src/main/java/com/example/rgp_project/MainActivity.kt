@@ -38,24 +38,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val buttonsetting = findViewById<Button>(R.id.button)
-        buttonsetting.setOnClickListener{
+        val BUTTON_SETTING = findViewById<Button>(R.id.button)
+        BUTTON_SETTING.setOnClickListener {
             val intent = Intent(this, Settings::class.java)
             startActivity(intent)
         }
 
-        val buttonsp = findViewById<Button>(R.id.button2)
-        buttonsp.setOnClickListener{
+        val BUTTON_SP = findViewById<Button>(R.id.button2)
+        BUTTON_SP.setOnClickListener {
             val intent = Intent(this, GameActivity::class.java)
             startActivity(intent)
         }
-        val buttonchart = findViewById<ImageButton>(R.id.imageButton5)
-        buttonchart.setOnClickListener{
+        val BUTTON_CHART = findViewById<ImageButton>(R.id.imageButton5)
+        BUTTON_CHART.setOnClickListener {
             val intent = Intent(this, Chart::class.java)
             startActivity(intent)
         }
-        val buttonmp = findViewById<Button>(R.id.button3)
-        buttonmp.setOnClickListener{
+        val BUTTON_MP = findViewById<Button>(R.id.button3)
+        BUTTON_MP.setOnClickListener {
             val intent = Intent(this, Lobby::class.java)
             startActivity(intent)
         }

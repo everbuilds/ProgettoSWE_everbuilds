@@ -20,8 +20,8 @@ class GameOverActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_over)
-        val score = intent.getLongExtra("score", 0)
-        findViewById<TextView>(R.id.score).text = score.toString()
+        val SCORE = intent.getLongExtra("score", 0)
+        findViewById<TextView>(R.id.score).text = SCORE.toString()
     }
 
     override fun onBackPressed() {
