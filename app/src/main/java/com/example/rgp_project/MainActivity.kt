@@ -14,7 +14,7 @@
 /**
  * Project:  EverBuilds
  * File:  MainActivity.kt
- * Author:  Marco Tesser
+ * Author:  Alice Zago
  * Created:  2021-02-01
  * Version:  1.0.0
  * ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––

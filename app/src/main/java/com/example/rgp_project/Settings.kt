@@ -1,7 +1,7 @@
 /**
  * Project:  EverBuilds
  * File:  Settings.kt
- * Author:  Giovanni Michieletto
+ * Author:  Alberto Sinigaglia
  * Created:  2021-02-23
  * Version:  1.0.0
  * ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––

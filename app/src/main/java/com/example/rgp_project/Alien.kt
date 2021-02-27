@@ -1,7 +1,7 @@
 /**
  * Project:  EverBuilds
  * File:  Alien.kt
- * Author:  Giovanni Michieletto
+ * Author:  Samuele Sartor
  * Created:  2021-02-18
  * Version:  1.0.0
  * ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––

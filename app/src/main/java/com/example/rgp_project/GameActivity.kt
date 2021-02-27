@@ -1,7 +1,7 @@
 /**
  * Project:  EverBuilds
  * File:  GameActivity.kt
- * Author:  Marco Tesser
+ * Author:  Riccardo Calcagno
  * Created:  2021-02-05
  * Version:  1.0.0
  * ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––

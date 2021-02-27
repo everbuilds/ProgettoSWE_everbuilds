@@ -1,7 +1,7 @@
 /**
  * Project:  EverBuilds
  * File:  Bullet.kt
- * Author:  Giovanni Michieletto
+ * Author:  Alice Zago
  * Created:  2021-02-17
  * Version:  1.0.0
  * ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––

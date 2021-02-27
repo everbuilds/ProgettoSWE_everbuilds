@@ -1,7 +1,7 @@
 /**
  * Project:  EverBuilds
  * File:  Lobby.kt
- * Author:  Marco Tesser
+ * Author:  Riccardo Calcagno
  * Created:  2021-02-10
  * Version:  1.0.0
  * ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––

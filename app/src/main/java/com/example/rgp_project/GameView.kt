@@ -1,7 +1,7 @@
 /**
  * Project:  EverBuilds
  * File:  GameView.kt
- * Author:  Marco Tesser
+ * Author:  Samuele Sartor
  * Created:  2021-02-03
  * Version:  1.0.0
  * ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
