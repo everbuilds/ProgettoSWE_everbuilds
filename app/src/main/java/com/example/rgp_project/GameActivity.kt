@@ -1,3 +1,15 @@
+/**
+ * Project:  EverBuilds
+ * File:  GameActivity.kt
+ * Author:  Marco Tesser
+ * Created:  2021-02-05
+ * Version:  1.0.0
+ * ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+ * Copyright 2021 EverBuild Group.
+ * Licensed under the MIT License.  See License.txt in the project root for license information.
+ * ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+ *
+ */
 package com.example.rgp_project
 
 import android.app.Activity
@@ -15,7 +27,7 @@ import com.example.rgp_project.model.Enemy
 
 class GameActivity : Activity() {
 
-    //gameView sarà la view e gestirà la logica del gioco
+    //gameView will be the mainview and it will manage the game's logic
     private var gameView: GameView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

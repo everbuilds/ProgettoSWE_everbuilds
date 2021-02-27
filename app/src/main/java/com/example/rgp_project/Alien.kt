@@ -1,3 +1,15 @@
+/**
+ * Project:  EverBuilds
+ * File:  Alien.kt
+ * Author:  Giovanni Michieletto
+ * Created:  2021-02-18
+ * Version:  1.0.0
+ * ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+ * Copyright 2021 EverBuild Group.
+ * Licensed under the MIT License.  See License.txt in the project root for license information.
+ * ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+ *
+ */
 package com.example.rgp_project
 
 import android.content.Context
@@ -8,20 +20,20 @@ import java.util.*
 
 class Alien(context: Context, row: Int, column: Int, screenX: Int, screenY: Int) {
 
-    //Grandezza alieni
+    //Alien's size
     var width = screenX / 35f
     private var height = screenY / 35f
     private val padding = screenX / 45
 
     var position = RectF(column * (width + padding), 100 + row * (width + padding / 4), column * (width + padding) + width, 100 + row * (width + padding / 4) + height)
 
-    //Velocità alieni
+    //Alien's speed
     private var speed = 40f
 
     private val left = 1
     private val right = 2
 
-    //Direzione movimento
+    //Movement direction
     private var shipMoving = right
 
     var isVisible = true
@@ -32,7 +44,7 @@ class Alien(context: Context, row: Int, column: Int, screenX: Int, screenY: Int)
     }
 
     init {
-        //Inizializza bitmap
+        //Initializes bitmap
         bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.alien)
         bitmap = Bitmap.createScaledBitmap(bitmap, (width.toInt()), (height.toInt()), false)
         numberOfAliens ++
@@ -57,7 +69,7 @@ class Alien(context: Context, row: Int, column: Int, screenX: Int, screenY: Int)
         position.top += height
         position.bottom += height
 
-        //Velocità aumenta con le ondate
+        //Speed increases as waves progress
         speed *=  (1.1f + (waveNumber.toFloat() / 20))
     }
 
@@ -66,9 +78,9 @@ class Alien(context: Context, row: Int, column: Int, screenX: Int, screenY: Int)
         val generator = Random()
         var randomNumber: Int
 
-        //Se player vicino considera di sparare
+        //If near player consideres shooting
         if (playerShipX + playerShipLength > position.left && playerShipX + playerShipLength < position.left + width || playerShipX > position.left && playerShipX < position.left + width) {
-            //Più alieni ci sono meno sparano e viceversa
+            //More aliens there are the less they shoot and viceversa
             randomNumber = generator.nextInt((100 * numberOfAliens) / waves)
             if (randomNumber == 0) {
                 return true
@@ -76,7 +88,7 @@ class Alien(context: Context, row: Int, column: Int, screenX: Int, screenY: Int)
 
         }
 
-        // Se spara a caso e non a giocatore vicino
+        // If player shoots randomly and not to the nearby player
         randomNumber = generator.nextInt(150 * numberOfAliens)
         return randomNumber == 0
     }

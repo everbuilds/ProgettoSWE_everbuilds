@@ -1,3 +1,16 @@
+/**
+ * Project:  EverBuilds
+ * File:  Bullet.kt
+ * Author:  Giovanni Michieletto
+ * Created:  2021-02-17
+ * Version:  1.0.0
+ * ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+ * Copyright 2021 EverBuild Group.
+ * Licensed under the MIT License.  See License.txt in the project root for license information.
+ * ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+ *
+ */
+
 package com.example.rgp_project
 
 import android.graphics.RectF
@@ -6,7 +19,7 @@ class Bullet(screenY: Int, private val speed: Float = 350f, heightModifier: Floa
 
     val position = RectF()
 
-    //Direzione bullet
+    // Bullet Direction
     val up = 0
     val down = 1
     private var heading = -1
@@ -26,7 +39,7 @@ class Bullet(screenY: Int, private val speed: Float = 350f, heightModifier: Floa
             isActive = true
             return true
         }
-        // Bullet già attivo
+        // Bullet already active
         return false
     }
 
@@ -36,7 +49,7 @@ class Bullet(screenY: Int, private val speed: Float = 350f, heightModifier: Floa
         } else {
             position.top += speed / fps
         }
-        //Aggiorna posizione fondo
+        // Updates bottom position
         position.bottom = position.top + height
     }
 }

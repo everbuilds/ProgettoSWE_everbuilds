@@ -1,3 +1,16 @@
+/**
+ * Project:  EverBuilds
+ * File:  Gameloop.kt
+ * Author:  Alberto Sinigaglia
+ * Created:  2021-02-04
+ * Version:  1.0.0
+ * ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+ * Copyright 2021 EverBuild Group.
+ * Licensed under the MIT License.  See License.txt in the project root for license information.
+ * ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+ *
+ */
+
 package com.example.rgp_project
 
 import android.graphics.Canvas
@@ -64,7 +77,7 @@ class GameLoop(var game: GameView, var surfaceHolder: SurfaceHolder) : Thread(){
 
 
 
-            // evitare di superare max UPS
+            // avoid to exceed max UPS
             elapsedTime = System.currentTimeMillis() - startTime;
             sleepTime = (updateCount * UPS_PERIOD).toLong() - elapsedTime
             if(sleepTime > 0){
@@ -75,7 +88,7 @@ class GameLoop(var game: GameView, var surfaceHolder: SurfaceHolder) : Thread(){
                 }
             }
 
-            //saltare frame per mantere UPS stabili
+            //skip frames to mantain stable UPS
             while(sleepTime < 0 && updateCount < MAX_UPS-1){
                 game.update()
                 updateCount++;

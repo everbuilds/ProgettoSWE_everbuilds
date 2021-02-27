@@ -1,3 +1,29 @@
+/**
+* Project:  EverBuilds
+* File:  <NameFile>
+* Author:  <Name Surname>
+* Created:  <YYYY>-<MM>-<DD>
+* Version:  <versionCode>
+* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+* Copyright 2021 EverBuild Group.
+* Licensed under the MIT License.  See License.txt in the project root for license information.
+* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+*
+*/
+
+/**
+ * Project:  EverBuilds
+ * File:  MainActivity.kt
+ * Author:  Marco Tesser
+ * Created:  2021-02-01
+ * Version:  1.0.0
+ * ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+ * Copyright 2021 EverBuild Group.
+ * Licensed under the MIT License.  See License.txt in the project root for license information.
+ * ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+ *
+ */
+
 package com.example.rgp_project
 
 import android.content.Intent
