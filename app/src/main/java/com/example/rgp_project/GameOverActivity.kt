@@ -15,7 +15,9 @@ package com.example.rgp_project
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
-
+/**
+ * Represents the Game Over activity
+ */
 class GameOverActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

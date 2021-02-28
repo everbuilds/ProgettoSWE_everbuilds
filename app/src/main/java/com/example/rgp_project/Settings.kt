@@ -15,7 +15,9 @@ package com.example.rgp_project
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-
+/**
+ * Represents the Settings
+ */
 class Settings : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

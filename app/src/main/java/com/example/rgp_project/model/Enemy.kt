@@ -7,7 +7,15 @@ import com.example.rgp_project.GameView
 import com.example.rgp_project.model.component.HealthBar
 import java.util.*
 import kotlin.math.pow
-
+/**
+ * Represents an Enemy
+ * @param player : used as a base to draw the enemy
+ * @param left : movement towards left
+ * @param top : movement towards the top
+ * @param width : enemy's width
+ * @param height : enemy's height
+ * @param scene : the gameview onto which the enemy will be drawn
+ */
 class Enemy(var player : Player, var left : Float, var top : Float, var width: Float, var height: Float , var scene : GameView) : HasHealth{
     var paint : Paint = Paint();
     companion object{
@@ -28,12 +36,21 @@ class Enemy(var player : Player, var left : Float, var top : Float, var width: F
                 this
         );
     }
-
+    /**
+     * Draws the player and enemy's healthbar
+     * @param canvas : the canvas onto which the enemy will be drawn
+     * @see HealthBar
+     */
     fun draw(canvas: Canvas?) {
         canvas?.drawRect(RectF(left, top, left + width, top+height), paint)
         healthBar.draw(canvas)
     }
-
+    /**
+     * Update bullets to the enemy
+     * @param bullets : the bullets the enemy has shot
+     * @see Bullet
+     * @see HealthBar
+     */
     fun update(bullets : List<Bullet>) {
 
         curUpdatesFromShot++
@@ -68,10 +85,17 @@ class Enemy(var player : Player, var left : Float, var top : Float, var width: F
 
         healthBar.update()
     }
-
+    /**
+     * Shoots the bullet in the right direction
+     * @see Bullet
+     */
     fun shoot() : Unit{
         scene.bullets.add(Bullet( left + width/2, top + height, Bullet.Direction.DOWN, scene))
     }
+    /**
+     * Checks if the enemy is dead
+     * @see HealthBar
+     */
     fun isDead() : Boolean{
         return this.health <= 0
     }

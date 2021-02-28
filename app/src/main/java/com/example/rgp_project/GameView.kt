@@ -28,7 +28,12 @@ import com.example.rgp_project.panel.GamePanel
 import com.example.rgp_project.panel.UPSPanel
 import java.util.concurrent.CopyOnWriteArrayList
 
-
+/**
+ * Represents the Game View
+ * @param context : the context onto which the game will be drawn
+ * @param MAX_WIDTH : the max width of the gameview
+ * @param MAX_HEIGHT : the max height of the gameview
+ */
 class GameView(context: Context, private val MAX_WIDTH : Float,private val MAX_HEIGHT : Float ) : SurfaceView(context), SurfaceHolder.Callback {
     private val GAME_OVER_LISTENERS : ArrayList<GameOverListener> = ArrayList()
     private val ENEMY_FACTORY = EnemyFactory(this);
@@ -64,6 +69,17 @@ class GameView(context: Context, private val MAX_WIDTH : Float,private val MAX_H
         powerUps.forEach{ el -> el.draw(canvas) }
     }
     private var eventEmitted = false;
+
+
+    /**
+     * Updates the view of the whole game
+     * @see EnemyFactory
+     * @see LifePowerUpFactory
+     * @see GameOverListener
+     * @see Bullet
+     * @see Enemy
+     * @see Player
+     */
     fun update() {
         if (player.health <= 0) {
             if(!eventEmitted) {
@@ -89,10 +105,17 @@ class GameView(context: Context, private val MAX_WIDTH : Float,private val MAX_H
     }
 
 
-
+    /**
+     * Updates the view of the whole game
+     * @see GameLoop
+     */
     fun pause() : Unit {
         gameLoop.stopLoop();
     }
+    /**
+     * Updates the view of the whole game
+     * @see GameLoop
+     */
     fun stop() : Unit {
         gameLoop.killLoop();
     }
@@ -118,14 +141,24 @@ class GameView(context: Context, private val MAX_WIDTH : Float,private val MAX_H
             else -> true;
         }
     }
-
+    /**
+     * Gets the maximum Game Height
+     * @return MAX_HEIGHT
+     */
     fun getMaxHeight() : Float {
         return MAX_HEIGHT
     }
+    /**
+     * Gets the maximum Game Width
+     * @return MAX_WIDTH
+     */
     fun getMaxWidth() : Float {
         return MAX_WIDTH
     }
-
+    /**
+     * Sets the gameoverlistener
+     * @see GameOverListener
+     */
     fun setGameOverListener(listener : GameOverListener) {
         GAME_OVER_LISTENERS.add(listener)
     }

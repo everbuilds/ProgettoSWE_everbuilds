@@ -3,6 +3,7 @@ package com.example.rgp_project.model
 import android.content.Context
 import android.graphics.*
 import android.util.Log
+import com.example.rgp_project.GameOverActivity
 import com.example.rgp_project.GameView
 import com.example.rgp_project.model.component.HealthBar
 import com.example.rgp_project.model.powerup.PowerUp
@@ -10,7 +11,13 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.pow
 import kotlin.math.sqrt
-
+/**
+ * Represents an Player
+ * @param positionX : position on the x axis
+ * @param positionY : position on the y axis
+ * @param radius : player's radius
+ * @param scene : the gameview onto which the player will be drawn
+ */
 class Player(var positionX : Float, var positionY : Float, var radius : Float, var scene : GameView) : HasHealth {
     val paint : Paint = Paint();
     companion object{
@@ -31,11 +38,22 @@ class Player(var positionX : Float, var positionY : Float, var radius : Float, v
                 this
         );
     }
+    /**
+     * Draws the player and player's healthbar
+     * @param canvas : the canvas onto which the player will be drawn
+     * @see HealthBar
+     */
     fun draw(canvas: Canvas?) {
         canvas?.drawCircle(positionX, positionY, radius, paint)
         healthBar.draw(canvas)
     }
-
+    /**
+     * Update bullets and powerups relative to the player
+     * @param bullets : the bullets the player has shot
+     * @param powerUps : the powerUps appearing on the screen
+     * @see Bullet
+     * @see HealthBar
+     */
     fun update( bullets: List<Bullet>, powerUps: List<PowerUp>) {
         curUpdatesFromShot++
         if(curUpdatesFromShot >= SHOT_EVERY_UPDATES){
@@ -71,7 +89,11 @@ class Player(var positionX : Float, var positionY : Float, var radius : Float, v
         }
         healthBar.update()
     }
-
+    /**
+     * Sets the player position
+     * @param x : player's X position
+     * @param y : player's Y position
+     */
     fun setPosition(x: Float, y: Float) {
         if(x > radius && x < scene.getMaxWidth() - radius){
             positionX = x
@@ -82,6 +104,10 @@ class Player(var positionX : Float, var positionY : Float, var radius : Float, v
         }
         positionY = y;
     }
+    /**
+     * Shoots the bullet in the right direction
+     * @see Bullet
+     */
     fun shoot() : Unit{
         scene.bullets.add(Bullet( positionX , positionY - radius - Bullet.RADIUS - 2, Bullet.Direction.UP, scene))
     }

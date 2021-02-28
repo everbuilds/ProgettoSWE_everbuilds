@@ -14,7 +14,12 @@
 package com.example.rgp_project
 
 import android.graphics.RectF
-
+/**
+ * Represents a Bullet
+ * @param screenY : position on the y axis
+ * @param speed : bullet's speed
+ * @param heightModifier : bullet's height modifier
+ */
 class Bullet(screenY: Int, private val speed: Float = 350f, heightModifier: Float = 20f) {
 
     val position = RectF()
@@ -29,6 +34,13 @@ class Bullet(screenY: Int, private val speed: Float = 350f, heightModifier: Floa
 
     var isActive = false
 
+
+    /**
+     * Dictates the direction of the player's bullet based on his own position
+     * @param startX : the current player's X position
+     * @param startY : the current player's Y position
+     * @param direction : the bullet's heading direction
+     */
     fun shoot(startX: Float, startY: Float, direction: Int): Boolean {
         if (!isActive) {
             position.left = startX
@@ -42,7 +54,10 @@ class Bullet(screenY: Int, private val speed: Float = 350f, heightModifier: Floa
         // Bullet already active
         return false
     }
-
+    /**
+     * Updates the bullet's position
+     * @param fps : the current game's fps
+     */
     fun update(fps: Long) {
         if (heading == up) {
             position.top -= speed / fps

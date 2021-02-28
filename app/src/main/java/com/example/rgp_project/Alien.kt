@@ -17,7 +17,14 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.RectF
 import java.util.*
-
+/**
+ * Represents an Alien
+ * @param screenX : position on the x axis
+ * @param screenY : position on the y axis
+ * @param row : the row onto which the alien will be placed
+ * @param column : the column onto which the alien will be placed
+ * @param scene : the context onto which the player will be drawn
+ */
 class Alien(context: Context, row: Int, column: Int, screenX: Int, screenY: Int) {
 
     //Alien's size
@@ -50,6 +57,12 @@ class Alien(context: Context, row: Int, column: Int, screenX: Int, screenY: Int)
         numberOfAliens ++
     }
 
+
+
+    /**
+     * Performs an update operation of the position of the ship.
+     * @param fps : the fps of the current game 
+     */
     fun update(fps: Long) {
         if (shipMoving == left) {
             position.left -= speed / fps
@@ -60,6 +73,10 @@ class Alien(context: Context, row: Int, column: Int, screenX: Int, screenY: Int)
         position.right = position.left + width
     }
 
+    /**
+     * Handles the ship movement in certain cirmcumstances
+     * @param waveNumber : the current waveNumber of the game
+     */
     fun dropDownAndReverse(waveNumber: Int) {
         shipMoving = if (shipMoving == left) {
             right
@@ -73,13 +90,20 @@ class Alien(context: Context, row: Int, column: Int, screenX: Int, screenY: Int)
         speed *=  (1.1f + (waveNumber.toFloat() / 20))
     }
 
+    /**
+     * Handles the player's aiming towards enemies
+     * @param playerShipX : the player's ship position.
+     * @param playerShipLength : the player's ship length.
+     * @param waves : the current waveNumber of the game.
+     */
     fun takeAim(playerShipX: Float, playerShipLength: Float, waves: Int): Boolean {
 
         val generator = Random()
         var randomNumber: Int
 
         //If near player consideres shooting
-        if (playerShipX + playerShipLength > position.left && playerShipX + playerShipLength < position.left + width || playerShipX > position.left && playerShipX < position.left + width) {
+        if (playerShipX + playerShipLength > position.left && playerShipX + playerShipLength < position.left + width ||
+                playerShipX > position.left && playerShipX < position.left + width) {
             //More aliens there are the less they shoot and viceversa
             randomNumber = generator.nextInt((100 * numberOfAliens) / waves)
             if (randomNumber == 0) {

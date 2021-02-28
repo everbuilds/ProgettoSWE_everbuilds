@@ -24,7 +24,9 @@ import android.view.Window
 import android.view.WindowManager
 import com.example.rgp_project.model.Enemy
 
-
+/**
+ * Represents the Game Activity
+ */
 class GameActivity : Activity() {
 
     //gameView will be the mainview and it will manage the game's logic
@@ -53,7 +55,11 @@ class GameActivity : Activity() {
         setContentView(gameView)
 
     }
-
+    /**
+     * Calls the GameOverActivity to finish the game and report the score
+     * @param score : the player's score at the end of the game.
+     * @see GameOverActivity
+     */
     private fun callGameOverActivity(score : Long) {
         val INTENT : Intent = Intent(this, GameOverActivity::class.java);
         INTENT.putExtra("score", score)

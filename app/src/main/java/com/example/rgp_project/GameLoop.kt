@@ -16,6 +16,11 @@ package com.example.rgp_project
 import android.graphics.Canvas
 import android.view.SurfaceHolder
 
+/**
+ * Represents the Game Loop
+ * @param game : the gameview onto which the game will be drawn
+ * @param surfaceHolder : the base of the gameview
+ */
 class GameLoop(var game: GameView, var surfaceHolder: SurfaceHolder) : Thread() {
 
     private val MAX_UPS: Double = 60.0
@@ -23,20 +28,34 @@ class GameLoop(var game: GameView, var surfaceHolder: SurfaceHolder) : Thread() 
     var isRunning = false;
     var averageUPS : Double = 0.0;
     var averageFPS : Double = 0.0;
+    /**
+     * Gets the averageUPS
+     * @return averageUPS
+     */
     @JvmName("getAverageUPS1")
     fun getAverageUPS(): Double {
         return averageUPS;
     }
-
+    /**
+     * Gets the averageFPS
+     * @return averageFPS
+     *
+     */
     @JvmName("getAverageFPS1")
     fun getAverageFPS(): Double {
         return averageFPS;
     }
-
+    /**
+     * Starts the loop
+     */
     fun startLoop() {
         isRunning = true;
         start();
     }
+    /**
+     * Stops the loop
+     * @throws InterruptedException if join() fails
+     */
     fun stopLoop() {
         isRunning = false
         try {

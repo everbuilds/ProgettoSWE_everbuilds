@@ -13,6 +13,14 @@
 
 package com.example.rgp_project
 
+/**
+ * Represents the Game Over Listener
+ */
 abstract class GameOverListener {
+
+     /**
+      * Abstract function
+      * @param score : the player's final score
+      */
      abstract fun gameOver( score: Long);
 }
